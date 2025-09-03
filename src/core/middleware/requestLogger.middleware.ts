@@ -1,26 +1,16 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import { LogService } from 'src/modules/log/log.service';
-import { LogLevels } from 'src/schemas/log/log.interface';
-import { Log } from 'src/schemas/log/log.schema';
+import { LoggerService } from '../logger/logger.service';
 import { RequestContextService } from '../cls/cls.service';
 
 @Injectable()
 export class RequestLoggerMiddleware implements NestMiddleware {
   constructor(
-    private readonly logService: LogService,
+    private readonly loggerService: LoggerService,
     private readonly requestContextService: RequestContextService,
   ) {}
 
-  private createLog(
-    requestId: string,
-    message: string,
-    context: Log['context'],
-  ) {
-    this.logService.createLog(LogLevels.INFO, message, requestId, context);
-  }
-
-  async use(req: Request, res: Response, next: NextFunction): Promise<void> {
+  use(req: Request, res: Response, next: NextFunction): void {
     const startTime = Date.now();
     const requestId = this.requestContextService.getRequestId();
     req.headers['x-request-id'] = requestId;
@@ -29,26 +19,32 @@ export class RequestLoggerMiddleware implements NestMiddleware {
     const { method, originalUrl, body, query, ip } = req;
     const userAgent = req.headers['user-agent'];
 
-    await this.createLog(requestId, `Start Request: ${method} ${originalUrl}`, {
-      url: originalUrl,
-      method,
-      body,
-      query,
-      ip,
-      userAgent,
-    });
-
-    res.on('finish', async () => {
-      const duration = Date.now() - startTime;
-      await this.createLog(
+    this.loggerService.info(
+      this.constructor.name,
+      {
         requestId,
-        `Finish Request: ${method} ${originalUrl} with status ${res.statusCode}`,
+        url: originalUrl,
+        method,
+        body,
+        query,
+        ip,
+        userAgent,
+      },
+      `Start Request: ${method} ${originalUrl}`,
+    );
+
+    res.on('finish', () => {
+      const duration = Date.now() - startTime;
+      this.loggerService.info(
+        this.constructor.name,
         {
+          requestId,
           method,
           url: originalUrl,
           statusCode: res.statusCode,
           duration,
         },
+        `Finish Request: ${method} ${originalUrl} with status ${res.statusCode}`,
       );
     });
 
