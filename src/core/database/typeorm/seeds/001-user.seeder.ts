@@ -14,99 +14,99 @@ export default class UserSeeder implements Seeder {
 
     const users: Partial<User>[] = [
       {
-        name: 'test',
+        email: 'test',
         score: 100,
       },
       {
-        name: 'test2',
+        email: 'test2',
         score: 200,
       },
       {
-        name: 'test3',
+        email: 'test3',
         score: 300,
       },
       {
-        name: 'test4',
+        email: 'test4',
         score: 400,
       },
       {
-        name: 'test5',
+        email: 'test5',
         score: 500,
       },
       {
-        name: 'test6',
+        email: 'test6',
         score: 600,
       },
       {
-        name: 'test7',
+        email: 'test7',
         score: 700,
       },
       {
-        name: 'test8',
+        email: 'test8',
         score: 800,
       },
       {
-        name: 'test9',
+        email: 'test9',
         score: 900,
       },
       {
-        name: 'test10',
+        email: 'test10',
         score: 1000,
       },
       {
-        name: 'test11',
+        email: 'test11',
         score: 1100,
       },
       {
-        name: 'test12',
+        email: 'test12',
         score: 1200,
       },
       {
-        name: 'test13',
+        email: 'test13',
         score: 1300,
       },
       {
-        name: 'test14',
+        email: 'test14',
         score: 1400,
       },
       {
-        name: 'test15',
+        email: 'test15',
         score: 1500,
       },
       {
-        name: 'test16',
+        email: 'test16',
         score: 1600,
       },
       {
-        name: 'test17',
+        email: 'test17',
         score: 1700,
       },
       {
-        name: 'test18',
+        email: 'test18',
         score: 1800,
       },
       {
-        name: 'test19',
+        email: 'test19',
         score: 1900,
       },
       {
-        name: 'test20',
+        email: 'test20',
         score: 2000,
       },
       {
-        name: 'test21',
+        email: 'test21',
         score: 2100,
       },
       {
-        name: 'test22',
+        email: 'test22',
         score: 2200,
       },
       {
-        name: 'test23',
+        email: 'test23',
         score: 2300,
       },
       {
-        name: 'test24',
+        email: 'test24',
         score: 2400,
       },
     ];
