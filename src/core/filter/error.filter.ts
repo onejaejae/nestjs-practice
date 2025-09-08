@@ -97,7 +97,7 @@ export class ErrorFilter implements ExceptionFilter {
       );
     }
 
-    this.loggerService.warn(
+    this.loggerService.error(
       this.constructor.name,
       {
         request: req,

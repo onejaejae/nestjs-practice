@@ -2,12 +2,13 @@ import {
   ConflictException,
   Injectable,
   UnauthorizedException,
+  Inject,
 } from '@nestjs/common';
 import { JwtService } from 'src/core/jwt/jwt.service';
 import { User } from 'src/entities/user/user.entity';
 import { TokenPair } from 'src/core/jwt/jwt.interface';
 import { LoggerService } from 'src/core/logger/logger.service';
-import * as bcrypt from 'bcrypt';
+import { IHashService, HASH_SERVICE } from 'src/core/hash/hash.interface';
 import { Transactional } from 'typeorm-transactional';
 import { SignUpBody } from './dto/request/signUp.body';
 import { UserRepository } from '../user/repository/user.repository';
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly loggerService: LoggerService,
+    @Inject(HASH_SERVICE) private readonly hashService: IHashService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
@@ -30,7 +32,10 @@ export class AuthService {
         return null;
       }
 
-      const isPasswordValid = await bcrypt.compare(password, user.password);
+      const isPasswordValid = await this.hashService.compare(
+        password,
+        user.password,
+      );
       if (!isPasswordValid) {
         return null;
       }
@@ -47,7 +52,7 @@ export class AuthService {
   }
 
   @Transactional()
-  async signUp(body: SignUpBody): Promise<TokenPair> {
+  async signUp(body: SignUpBody): Promise<void> {
     const { email, password } = body;
 
     // Check if user already exists
@@ -59,13 +64,10 @@ export class AuthService {
     }
 
     // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await this.hashService.hash(password);
 
     // Create user
-    const user = await this.userRepository.save(body.toEntity(hashedPassword));
-
-    // Generate tokens
-    return this.jwtService.generateTokenPair(user.id);
+    await this.userRepository.save(body.toEntity(hashedPassword));
   }
 
   async signIn(body: SignInBody): Promise<TokenPair> {
@@ -85,6 +87,6 @@ export class AuthService {
   }
 
   async refreshTokens(refreshToken: string): Promise<TokenPair> {
-    return await this.jwtService.refreshTokens(refreshToken);
+    return this.jwtService.refreshTokens(refreshToken);
   }
 }
