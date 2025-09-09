@@ -11,6 +11,8 @@ import { User } from 'src/entities/user/user.entity';
 import { UserService } from './user.service';
 import { UpdateUserScoreDto } from './dto/request/updateUserScore.dto';
 import { GetUsersByRankDto } from './dto/request/getUsersByRank.dto';
+import { UpdateUserBody } from './dto/request/updateUser.body';
+import { CurrentUser } from 'src/core/decorator/currentUser.decorator';
 
 @Controller('users')
 export class UserController {
@@ -21,14 +23,19 @@ export class UserController {
     return this.service.getUsersByRank(query);
   }
 
-  @Get('/:userId')
-  async getUser(@Param('userId', ParseUUIDPipe) userId: User['id']) {
-    return this.service.getUser(userId);
-  }
-
   @Get('/:userId/rank')
   async getUserRank(@Param('userId', ParseUUIDPipe) userId: User['id']) {
     return this.service.getUserRank(userId);
+  }
+
+  @Get('/me')
+  async getMe(@CurrentUser() user: User) {
+    return this.service.getUser(user.id);
+  }
+
+  @Patch('/me')
+  async updateMe(@CurrentUser() user: User, @Body() body: UpdateUserBody) {
+    return this.service.updateUser(user.id, body);
   }
 
   @Patch('/:userId/score')

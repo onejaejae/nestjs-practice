@@ -13,6 +13,7 @@ import { Transactional } from 'typeorm-transactional';
 import { SignUpBody } from './dto/request/signUp.body';
 import { UserRepository } from '../user/repository/user.repository';
 import { SignInBody } from './dto/request/signIn.body';
+import { OmitUppercaseProps } from 'src/core/database/typeorm/typeorm.interface';
 
 @Injectable()
 export class AuthService {
@@ -23,7 +24,10 @@ export class AuthService {
     @Inject(HASH_SERVICE) private readonly hashService: IHashService,
   ) {}
 
-  async validateUser(email: string, password: string): Promise<User | null> {
+  async validateUser(
+    email: string,
+    password: string,
+  ): Promise<OmitUppercaseProps<User> | null> {
     try {
       const user = await this.userRepository.findOneByFilters({
         email,

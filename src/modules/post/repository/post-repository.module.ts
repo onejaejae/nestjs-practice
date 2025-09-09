@@ -1,13 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PostRepository } from './post.repository';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Post, PostSchema } from 'src/schemas/post/post.schema';
+import { TypeOrmExModule } from 'libs/common/typeorm.ex/typeorm-ex.module';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
-  ],
-  providers: [PostRepository],
-  exports: [PostRepository],
+  imports: [TypeOrmExModule.forCustomRepository([PostRepository])],
+  exports: [TypeOrmExModule.forCustomRepository([PostRepository])],
 })
 export class PostRepositoryModule {}

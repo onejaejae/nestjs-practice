@@ -5,6 +5,7 @@ import { CacheKeys } from 'src/core/cache/cache.interface';
 import { Cache } from 'src/core/cache/cache.decorator';
 import { RankService } from '../rank/rank.service';
 import { GetUsersByRankDto } from './dto/request/getUsersByRank.dto';
+import { UpdateUserBody } from './dto/request/updateUser.body';
 import { LoggerService } from 'src/core/logger/logger.service';
 
 @Injectable()
@@ -17,9 +18,7 @@ export class UserService {
 
   @Cache({ key: CacheKeys.User, ttl: 60 })
   async getUser(userId: User['id']) {
-    const user = await this.userRepository.findByIdOrThrow(userId);
-
-    return user;
+    return this.userRepository.findByIdOrThrow(userId);
   }
 
   async getUserRank(userId: User['id']) {
@@ -47,6 +46,13 @@ export class UserService {
     );
 
     return this.userRepository.findByIds(targetUserIds);
+  }
+
+  async updateUser(userId: User['id'], body: UpdateUserBody) {
+    const user = await this.userRepository.findByIdOrThrow(userId);
+    user.nickname = body.nickname;
+
+    return this.userRepository.save(user);
   }
 
   async updateScore(userId: User['id'], score: User['score']) {

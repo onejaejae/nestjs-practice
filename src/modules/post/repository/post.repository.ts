@@ -1,14 +1,6 @@
-import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Post, PostDocument } from 'src/schemas/post/post.schema';
+import { CustomRepository } from 'libs/common/typeorm.ex/typeorm-ex.decorator';
+import { GenericTypeOrmRepository } from 'src/core/database/typeorm/generic-typeorm.repository';
+import { Post } from 'src/entities/post/post.entity';
 
-@Injectable()
-export class PostRepository {
-  constructor(@InjectModel(Post.name) private postModel: Model<PostDocument>) {}
-
-  async create(model: Post): Promise<Post> {
-    const createdPost = await this.postModel.create(model);
-    return createdPost.save();
-  }
-}
+@CustomRepository(Post)
+export class PostRepository extends GenericTypeOrmRepository<Post> {}
