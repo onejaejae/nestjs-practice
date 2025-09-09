@@ -13,7 +13,7 @@ export class Post extends UuidEntity {
   @Column({ type: 'uuid' })
   userId: string;
 
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'UserId' })
+  @ManyToOne(() => User, (user) => user.Posts)
+  @JoinColumn({ name: 'user_id' })
   User: User;
 }
