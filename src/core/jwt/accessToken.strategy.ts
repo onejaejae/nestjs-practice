@@ -5,6 +5,7 @@ import { MoinConfigService } from 'src/core/config/config.service';
 import { JwtPayload, TokenType } from 'src/core/jwt/jwt.interface';
 import { User } from 'src/entities/user/user.entity';
 import { UserRepository } from 'src/modules/user/repository/user.repository';
+import { OmitUppercaseProps } from '../database/typeorm/typeorm.interface';
 
 @Injectable()
 export class AccessTokenStrategy extends PassportStrategy(
@@ -23,7 +24,7 @@ export class AccessTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(payload: JwtPayload): Promise<User> {
+  async validate(payload: JwtPayload): Promise<OmitUppercaseProps<User>> {
     if (payload.type !== TokenType.ACCESS) {
       throw new UnauthorizedException('Invalid token type');
     }
