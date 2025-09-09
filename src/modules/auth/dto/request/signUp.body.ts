@@ -9,6 +9,9 @@ export class SignUpBody {
   @IsString()
   password: User['password'];
 
+  @IsString()
+  nickname: User['nickname'];
+
   toEntity(hashedPassword: User['password']): User {
     return plainToInstance(User, {
       ...this,
