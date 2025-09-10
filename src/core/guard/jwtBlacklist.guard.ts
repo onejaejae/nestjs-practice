@@ -8,17 +8,12 @@ import { Request } from 'express';
 import { JwtService } from '../jwt/jwt.service';
 import { IS_PUBLIC_KEY } from '../decorator/public.decorator';
 import { Reflector } from '@nestjs/core';
-import { RequestContextService } from '../cls/cls.service';
-import { LogService } from 'src/modules/log/log.service';
-import { LogLevels } from 'src/schemas/log/log.interface';
 
 @Injectable()
 export class JwtBlacklistGuard implements CanActivate {
   constructor(
     private reflector: Reflector,
     private jwtService: JwtService,
-    private readonly logService: LogService,
-    private readonly requestContextService: RequestContextService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -41,13 +36,9 @@ export class JwtBlacklistGuard implements CanActivate {
     // 토큰 블랙리스트 확인
     const isBlacklisted = await this.jwtService.isTokenBlacklisted(token);
     if (isBlacklisted) {
-      const requestId = this.requestContextService.getRequestId();
-      await this.logService.createLog(
-        LogLevels.ERROR,
-        `JwtBlacklistGuard Error: Token: ${token} has been revoked`,
-        requestId,
+      throw new UnauthorizedException(
+        'JwtBlacklistGuard Error: Token has been revoked',
       );
-      throw new UnauthorizedException('Token has been revoked');
     }
 
     return true;
