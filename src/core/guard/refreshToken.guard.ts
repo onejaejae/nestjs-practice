@@ -1,17 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { LoggerService } from 'src/core/logger/logger.service';
-import { LogService } from 'src/modules/log/log.service';
-import { LogLevels } from 'src/schemas/log/log.interface';
-import { RequestContextService } from '../cls/cls.service';
 
 @Injectable()
 export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
-  constructor(
-    private readonly loggerService: LoggerService,
-    private readonly logService: LogService,
-    private readonly requestContextService: RequestContextService,
-  ) {
+  constructor(private readonly loggerService: LoggerService) {
     super();
   }
 
@@ -26,12 +19,6 @@ export class RefreshTokenGuard extends AuthGuard('jwt-refresh') {
       `RefreshTokenGuard Success: userId: ${user.sub}`,
     );
 
-    const requestId = this.requestContextService.getRequestId();
-    this.logService.createLog(
-      LogLevels.INFO,
-      `RefreshTokenGuard Success: userId: ${user.sub}`,
-      requestId,
-    );
     return user;
   }
 }

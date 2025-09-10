@@ -50,4 +50,8 @@ export class PostService {
 
     await this.postRepository.softRemove(post);
   }
+
+  async adminDeletePost(postId: Post['id']) {
+    await this.postRepository.deleteById(postId);
+  }
 }
