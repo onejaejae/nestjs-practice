@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "build": "nest build",
     "start": "NODE_ENV=local nest start --watch",
     "test": "NODE_ENV=${npm_config_env:-test} TZ=utc jest --config jest.config.js --forceExit --logHeapUsage --no-compilation-cache --detectOpenHandles",
     "docker:up": "docker compose -f docker-compose.local.yml up --build -d",
