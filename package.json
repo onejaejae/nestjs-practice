@@ -12,8 +12,8 @@
     "docker:up": "docker compose -f docker-compose.local.yml up --build -d",
     "docker:down": "docker compose -f docker-compose.local.yml down",
     "typeorm-ext": "cross-env NODE_ENV=${npm_config_env:-local} ts-node -r tsconfig-paths/register ./node_modules/typeorm-extension/bin/cli.cjs -d typeorm.config.ts",
-    "entity:drop": "NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./typeorm.config.ts",
-    "entity:sync": "NODE_ENV=local ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:sync -d ./typeorm.config.ts",
+    "entity:drop": "NODE_ENV=${npm_config_env:-test} ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:drop -d ./typeorm.config.ts",
+    "entity:sync": "NODE_ENV=${npm_config_env:-test} ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js schema:sync -d ./typeorm.config.ts",
     "seed": "cross-env npm run typeorm-ext seed:run",
     "db:reset": "npm run entity:drop && npm run entity:sync && npm run seed"
   },
