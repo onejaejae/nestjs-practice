@@ -1,16 +1,9 @@
-import {
-  ClassProvider,
-  FactoryProvider,
-  Inject,
-  Module,
-  OnModuleInit,
-} from '@nestjs/common';
-import { Redis } from 'ioredis';
-import { CacheService } from './cache.service';
+import { ClassProvider, Inject, Module, OnModuleInit } from '@nestjs/common';
+import { MockCacheService } from './cache.service';
 import {
   CacheServiceKey,
   ICacheOptions,
-  RedisClientKey,
+  ICacheService,
 } from './cache.interface';
 import {
   DiscoveryModule,
@@ -21,30 +14,30 @@ import {
 import { CACHE_KEY } from './cache.decorator';
 import { LoggerService } from '../logger/logger.service';
 
-const redisConnect: FactoryProvider = {
-  provide: RedisClientKey,
-  useFactory: async () => {
-    const client = new Redis({
-      port: 6379,
-      host: '127.0.0.1',
-    });
-    return client;
-  },
-};
+// const redisConnect: FactoryProvider = {
+//   provide: RedisClientKey,
+//   useFactory: async () => {
+//     const client = new Redis({
+//       port: 6379,
+//       host: '127.0.0.1',
+//     });
+//     return client;
+//   },
+// };
 
 const cacheService: ClassProvider = {
   provide: CacheServiceKey,
-  useClass: CacheService,
+  useClass: MockCacheService,
 };
 
 @Module({
   imports: [DiscoveryModule],
-  providers: [redisConnect, cacheService],
+  providers: [cacheService],
   exports: [cacheService],
 })
 export class CacheModule implements OnModuleInit {
   constructor(
-    @Inject(CacheServiceKey) private readonly cacheService: CacheService,
+    @Inject(CacheServiceKey) private readonly cacheService: ICacheService,
     private readonly discoveryService: DiscoveryService,
     private readonly metadataScanner: MetadataScanner,
     private readonly reflector: Reflector,

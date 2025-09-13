@@ -1,8 +1,11 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService as NestJwtService } from '@nestjs/jwt';
 import { MoinConfigService } from 'src/core/config/config.service';
-import { CacheService } from 'src/core/cache/cache.service';
-import { CacheKeys, CacheServiceKey } from 'src/core/cache/cache.interface';
+import {
+  CacheKeys,
+  CacheServiceKey,
+  ICacheService,
+} from 'src/core/cache/cache.interface';
 import { LoggerService } from 'src/core/logger/logger.service';
 import {
   DecodedToken,
@@ -20,7 +23,7 @@ export class JwtService {
   private readonly refreshExpiration: string;
 
   constructor(
-    @Inject(CacheServiceKey) private readonly cacheService: CacheService,
+    @Inject(CacheServiceKey) private readonly cacheService: ICacheService,
     private readonly nestJwtService: NestJwtService,
     private readonly configService: MoinConfigService,
     private readonly loggerService: LoggerService,

@@ -1,11 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CacheKeys, CacheServiceKey } from 'src/core/cache/cache.interface';
-import { CacheService } from 'src/core/cache/cache.service';
+import {
+  CacheKeys,
+  CacheServiceKey,
+  ICacheService,
+} from 'src/core/cache/cache.interface';
 
 @Injectable()
 export class RankService {
   constructor(
-    @Inject(CacheServiceKey) private readonly cacheService: CacheService,
+    @Inject(CacheServiceKey) private readonly cacheService: ICacheService,
   ) {}
 
   async getUserRank(userId: string): Promise<number | null> {
