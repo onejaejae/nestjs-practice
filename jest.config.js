@@ -12,5 +12,5 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/$1',
     '^libs/(.*)$': '<rootDir>/../libs/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/../test/setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/../test/unit-setup.ts'],
 };
