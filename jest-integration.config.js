@@ -1,7 +1,7 @@
 module.exports = {
   moduleFileExtensions: ['js', 'json', 'ts'],
   rootDir: 'src',
-  testRegex: '.*\\.spec\\.ts$',
+  testRegex: '.integration.spec.ts$',
   transform: {
     '^.+\\.(t|j)s$': 'ts-jest',
   },
@@ -12,5 +12,4 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/$1',
     '^libs/(.*)$': '<rootDir>/../libs/$1',
   },
-  setupFilesAfterEnv: ['<rootDir>/../test/unit-setup.ts'],
 };

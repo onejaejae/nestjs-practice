@@ -2,7 +2,13 @@ import { plainToInstance } from 'class-transformer';
 import { IsString } from 'class-validator';
 import { User } from 'src/entities/user/user.entity';
 
-export class SignUpBody {
+export interface ISignUpBody {
+  email: User['email'];
+  password: User['password'];
+  nickname: User['nickname'];
+}
+
+export class SignUpBody implements ISignUpBody {
   @IsString()
   email: User['email'];
 

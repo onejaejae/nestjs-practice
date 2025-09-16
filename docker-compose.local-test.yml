@@ -1,0 +1,21 @@
+services:
+  mysql-test:
+    image: 'mysql:latest'
+    container_name: 'local-test-mysql'
+    ports:
+      - '3308:3308'
+    expose:
+      - 3308
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'test'
+      MYSQL_DATABASE: 'nest-practice'
+      MYSQL_TCP_PORT: 3308
+
+  redis-test:
+    image: 'redis:latest'
+    container_name: 'local-test-redis'
+    command: redis-server --port 6379
+    ports:
+      - '6380:6379'
