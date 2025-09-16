@@ -4,13 +4,18 @@ import { IsNullable } from 'src/core/decorator/isNullable.decorator';
 import { Post } from 'src/entities/post/post.entity';
 import { User } from 'src/entities/user/user.entity';
 
-export class CreatePostBody {
+export interface ICreatePostBody {
+  title: Post['title'];
+  content: Post['content'];
+}
+
+export class CreatePostBody implements ICreatePostBody {
   @IsString()
-  title: string;
+  title: Post['title'];
 
   @IsNullable()
   @IsString()
-  content: string | null;
+  content: Post['content'];
 
   toEntity(userId: User['id']): Post {
     return plainToInstance(Post, {
