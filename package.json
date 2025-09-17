@@ -10,6 +10,7 @@
     "start": "NODE_ENV=local nest start --watch",
     "test": "NODE_ENV=${npm_config_env:-test} jest --config jest.config.js --forceExit --logHeapUsage --no-compilation-cache --detectOpenHandles",
     "test:integration": "NODE_ENV=${npm_config_env:-test} jest --config jest-integration.config.js --forceExit --logHeapUsage --no-compilation-cache --detectOpenHandles",
+    "test:e2e": "NODE_ENV=${npm_config_env:-test} jest --config ./test/jest-e2e.json --forceExit --logHeapUsage --no-compilation-cache --detectOpenHandles",
     "docker:up": "docker compose -f docker-compose.local.yml up --build -d",
     "docker:down": "docker compose -f docker-compose.local.yml down",
     "docker-test:up": "docker compose -f docker-compose.local-test.yml up --build -d",

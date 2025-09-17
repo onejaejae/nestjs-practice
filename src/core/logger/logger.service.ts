@@ -76,6 +76,8 @@ export class LoggerService {
     object: object | string,
     message?: string,
   ) {
+    if (this.isTest) return;
+
     const log = this.format(object, message);
     this.winstonLogger.log(log, this.makeContextString(detailedContext));
   }
