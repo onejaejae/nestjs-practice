@@ -8,6 +8,14 @@ import {
   Response,
   UseGuards,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiBearerAuth,
+  ApiCookieAuth,
+} from '@nestjs/swagger';
 import { Response as ExpressResponse } from 'express';
 import { AuthService } from './auth.service';
 import { User } from 'src/entities/user/user.entity';
@@ -19,7 +27,9 @@ import { ExtractJwt } from 'passport-jwt';
 import { Public } from 'src/core/decorator/public.decorator';
 import { RefreshTokenGuard } from 'src/core/guard/refreshToken.guard';
 import { Env } from 'src/core/config';
+import { AccessTokenResponse } from './dto/response/accessToken.response';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   private readonly isLocal: boolean;
@@ -35,7 +45,7 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, {
       httpOnly: !this.isLocal,
       secure: !this.isLocal,
-      sameSite: this.isLocal ? 'none' : 'strict',
+      sameSite: this.isLocal ? 'lax' : 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
   }
@@ -51,6 +61,9 @@ export class AuthController {
   @Public()
   @Post('sign-up')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Sign up a new user' })
+  @ApiResponse({ status: 201, description: 'User successfully created.' })
+  @ApiResponse({ status: 409, description: 'User already exists.' })
   async signUp(@Body() body: SignUpBody) {
     return this.authService.signUp(body);
   }
@@ -58,6 +71,14 @@ export class AuthController {
   @Public()
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Sign in a user' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully signed in, returns access token.',
+    type: AccessTokenResponse,
+  })
+  @ApiResponse({ status: 401, description: 'Invalid credentials.' })
+  @ApiBody({ type: SignInBody })
   async signIn(
     @Body() body: SignInBody,
     @Response({ passthrough: true }) res: ExpressResponse,
@@ -70,6 +91,10 @@ export class AuthController {
 
   @Post('sign-out')
   @HttpCode(HttpStatus.OK)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Sign out the current user' })
+  @ApiResponse({ status: 200, description: 'User successfully signed out.' })
+  @ApiResponse({ status: 401, description: 'Unauthorized.' })
   async signOut(
     @CurrentUser() user: User,
     @Request() req: Request,
@@ -86,6 +111,17 @@ export class AuthController {
   @Post('refresh')
   @UseGuards(RefreshTokenGuard)
   @HttpCode(HttpStatus.OK)
+  @ApiCookieAuth('refreshToken')
+  @ApiOperation({ summary: 'Refresh access token' })
+  @ApiResponse({
+    status: 200,
+    description: 'Access token successfully refreshed.',
+    type: AccessTokenResponse,
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Invalid or missing refresh token.',
+  })
   async refresh(
     @CurrentRefreshToken() refreshToken: string,
     @Response({ passthrough: true }) res: ExpressResponse,
