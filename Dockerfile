@@ -9,7 +9,7 @@ COPY . .
 RUN npm run build
 
 # Prune development dependencies
-RUN npm prune --production
+RUN npm prune --production --legacy-peer-deps
 
 # Stage 2: Create the final production image
 FROM node:18-alpine
