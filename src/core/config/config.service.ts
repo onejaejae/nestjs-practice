@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   AppConfig,
+  AWSConfig,
   Configurations,
   DBConfig,
   JwtConfig,
@@ -31,5 +32,9 @@ export class MoinConfigService {
 
   getJwtConfig(): JwtConfig {
     return this.configService.getOrThrow('JWT');
+  }
+
+  getAwsConfig(): AWSConfig {
+    return this.configService.getOrThrow('AWS');
   }
 }
