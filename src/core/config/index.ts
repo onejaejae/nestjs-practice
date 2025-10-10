@@ -38,10 +38,20 @@ export interface JwtConfig {
   JWT_REFRESH_EXPIRATION: string;
 }
 
+export interface AWSConfig {
+  s3: {
+    BUCKET: string;
+    REGION: string;
+    ACCESS_KEY: string;
+    SECRET_KEY: string;
+  };
+}
+
 export interface Configurations {
   APP: AppConfig;
   DB: DBConfig;
   MONGODB: MongoDBConfig;
   REDIS: RedisConfig;
   JWT: JwtConfig;
+  AWS: AWSConfig;
 }

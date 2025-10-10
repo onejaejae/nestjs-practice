@@ -32,5 +32,13 @@ export const configurations = (): Configurations => {
       JWT_ACCESS_EXPIRATION: process.env.JWT_ACCESS_EXPIRATION || '',
       JWT_REFRESH_EXPIRATION: process.env.JWT_REFRESH_EXPIRATION || '',
     },
+    AWS: {
+      s3: {
+        BUCKET: process.env.AWS_S3_BUCKET || '',
+        REGION: process.env.AWS_S3_REGION || '',
+        ACCESS_KEY: process.env.AWS_ACCESS_KEY_ID || '',
+        SECRET_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
+      },
+    },
   };
 };

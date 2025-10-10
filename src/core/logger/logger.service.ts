@@ -1,7 +1,7 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
 import { INQUIRER } from '@nestjs/core';
 import { WINSTON_MODULE_NEST_PROVIDER, WinstonLogger } from 'nest-winston';
-import { v7 } from 'uuid';
+import { v4 } from 'uuid';
 import { Log } from './logger.interface';
 import { MoinConfigService } from '../config/config.service';
 import { Env } from '../config';
@@ -22,7 +22,7 @@ export class LoggerService {
   }
 
   private format(obj: object | string, message = ''): Log {
-    const log: Log = { message, logId: v7() };
+    const log: Log = { message, logId: v4() };
     const appConfig = this.configService.getAppConfig();
 
     // additional metadata for cloudwatch
